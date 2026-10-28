@@ -36,6 +36,15 @@ stages and reveals them. Until the footage library is rendered, the studio
 draws a stylized placeholder in its place (`src/demo/footage.json` maps each
 cast member and setting to its clip).
 
+## Production library
+
+The cast, stills, clips and finished ads on the site are the real ones from
+the production UGC Lab, imported read-only by
+`scripts/import/import-ugc-lab.cjs` into `public/library/production/` and
+`src/demo/production.json` (web-sized: 720-wide H.264, JPEG stills). Takes the
+lab never animated show as "Still only" in the studio. Without the import the
+site falls back to the engine-dealt Tempo cast below.
+
 ## Rendering the footage library
 
 `scripts/render/` runs the production pipeline over the cast: a portrait per

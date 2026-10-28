@@ -46,6 +46,9 @@ export interface CastMember {
   build: string;
   /** The exact portrait prompt this member was cast from. */
   portraitPrompt: string;
+  /** Members imported from production: their real face and the age band they were cast in. */
+  faceUrl?: string;
+  ageLabel?: string;
 }
 
 /** Everything that varies per take, on top of who is in it. */

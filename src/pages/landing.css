@@ -77,7 +77,7 @@
 .section-head h2 { font-size: clamp(30px, 3.8vw, 46px); letter-spacing: -.04em; line-height: 1.06; margin: 10px 0 14px; font-weight: 620; }
 .section-head p { font-size: 17px; margin: 0; }
 
-.yours, .how, .doctrine, .cast { margin-bottom: 130px; }
+.yours, .how, .doctrine, .cast, .real-ads { margin-bottom: 130px; }
 .tri { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 @media (max-width: 860px) { .tri { grid-template-columns: 1fr; } }
 .tile { padding: 20px; box-shadow: var(--shadow-sm); }
@@ -110,7 +110,9 @@
 .prompt-head .btn { margin-left: auto; }
 .prompt-face { width: 56px; height: 56px; object-fit: cover; border-radius: 12px; }
 .prompt-head .who { font-weight: 600; margin-top: 2px; }
-.prompts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.prompts { display: grid; grid-template-columns: auto 1fr 1fr; gap: 16px; margin-top: 16px; align-items: start; }
+.prompts:not(:has(.prompt-clip)) { grid-template-columns: 1fr 1fr; }
+.prompt-clip { width: 180px; aspect-ratio: 9 / 16; object-fit: cover; border-radius: var(--r-md); background: #000; margin-top: 8px; }
 @media (max-width: 760px) { .prompts { grid-template-columns: 1fr; } }
 .prompts pre { white-space: pre-wrap; font-family: var(--mono); font-size: 12px; line-height: 1.55; color: var(--ink-2); background: var(--bg-sunken); border-radius: var(--r-md); padding: 14px; margin: 8px 0 0; max-height: 340px; overflow: auto; }
 

@@ -5,16 +5,20 @@ import { drawPlaceholderReaction } from "../compose";
 const W = 360;
 const H = 640;
 
-/** A still frame of a take: the posed frame the clip is animated from. */
-export function StillFrame({ source, className }: { source: ReactionSource; className?: string }) {
+/**
+ * A still frame of a take: the posed frame the clip is animated from.
+ * `stillUrl` shows a real still directly, for takes that were never animated.
+ */
+export function StillFrame({ source, className, stillUrl }: { source: ReactionSource; className?: string; stillUrl?: string }) {
   const src = useMemo(() => {
-    if (source.kind === "video") return null;
+    if (stillUrl || source.kind === "video") return null;
     const c = document.createElement("canvas");
     c.width = W;
     c.height = H;
     drawPlaceholderReaction(c.getContext("2d")!, source.member, source.setting, source.seed, 0, W, H);
     return c.toDataURL("image/jpeg", 0.86);
-  }, [source]);
+  }, [source, stillUrl]);
+  if (stillUrl) return <img className={className} src={stillUrl} alt="" />;
   if (source.kind === "video") {
     return source.poster
       ? <img className={className} src={source.poster} alt="" />

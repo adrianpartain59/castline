@@ -88,3 +88,7 @@
 .job ul { list-style: none; padding: 0; margin: 0; font-size: 13.5px; display: flex; flex-direction: column; gap: 4px; color: var(--ink-3); }
 .job li.done { color: var(--ink-2); }
 .job li.now { color: var(--ink); }
+
+.library-bar { margin-top: 40px; }
+.take-media:disabled { cursor: default; }
+.face:disabled { cursor: default; }

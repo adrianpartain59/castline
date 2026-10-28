@@ -3,7 +3,8 @@ import "./studio.css";
 import type { CastMember, ComposeSpec, Gender, SoundChoice, Take, TempoScreenKey, TextStyle } from "../contracts";
 import { dealTakes, DIRECTION_OPTIONS, GESTURE_OPTIONS, HOOKS } from "../engine";
 import { exportVideo, SOUNDS, TEMPO_SCREENS } from "../compose";
-import { CAST_GROUPS, castById, DEMO_BRAND, reactionFor } from "../demo/library";
+import { CAST_GROUPS, castById, DEMO_BRAND, detailOf, HAS_PRODUCTION, PRODUCTION, reactionFor, who } from "../demo/library";
+import { productionTake, takesFor, toTake } from "../demo/production";
 import SpotPlayer from "../components/SpotPlayer";
 import Portrait from "../components/Portrait";
 import Logo from "../components/Logo";
@@ -125,7 +126,10 @@ export default function Studio() {
     wardrobe ? DIRECTION_OPTIONS.wardrobe.find((o) => o.key === wardrobe)?.sentence : null,
   ].filter(Boolean).join(" ");
 
+  // From production, only people the lab has actually shot can be picked.
+  const castable = (id: string) => !HAS_PRODUCTION || takesFor(id).length > 0;
   const toggleCast = (id: string) =>
+    castable(id) &&
     setSelected((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : cur.length >= count ? cur : [...cur, id]));
 
   const summary =
@@ -135,10 +139,25 @@ export default function Studio() {
         ? `all ${count} takes use ${selectedMembers[0].name}`
         : `${count} takes across ${selected.length} faces, every face gets at least one`;
 
+  /** The production takes for the picked faces, dealt round-robin so every face gets one. */
+  const productionTakes = (): Take[] => {
+    const pools = selected.map((id) => {
+      const mine = takesFor(id);
+      // Animated takes first, then the ad type asked for, then whatever else this person shot.
+      const rank = (t: (typeof mine)[number]) => (t.clip ? 0 : 2) + (t.persona.adType === adType ? 0 : 1);
+      return [...mine].sort((a, b) => rank(a) - rank(b));
+    });
+    const out: Take[] = [];
+    for (let round = 0; out.length < count && pools.some((p) => p.length > round); round++) {
+      for (const pool of pools) if (pool[round] && out.length < count) out.push(toTake(pool[round]));
+    }
+    return out;
+  };
+
   const generateStills = async () => {
     const cast = selectedMembers;
     const seed = hashSeed([...selected, adType, setting, wardrobe, notes, count].join("|"));
-    const dealt = dealTakes({
+    const dealt = HAS_PRODUCTION ? productionTakes() : dealTakes({
       cast,
       count,
       pins: { adType, setting: setting ?? undefined, wardrobe: wardrobe ?? undefined },
@@ -151,7 +170,7 @@ export default function Studio() {
       650,
     );
     setTakes(dealt);
-    setKeepers(dealt.slice(0, Math.min(2, dealt.length)).map((t) => t.id));
+    setKeepers(dealt.filter((t) => animatable(t)).slice(0, 2).map((t) => t.id));
     setClips([]);
     goto(2);
   };
@@ -163,7 +182,12 @@ export default function Studio() {
     goto(3);
   };
 
+  /** A production take without a clip was never animated: it can be reviewed, not kept. */
+  const animatable = (t: Take) => !HAS_PRODUCTION || Boolean(productionTake(t.id)?.clip);
+
   const sourceFor = (t: Take) => {
+    const real = productionTake(t.id);
+    if (real?.clip) return { kind: "video" as const, src: real.clip, poster: real.still };
     const m = castById(t.persona.castId)!;
     return reactionFor(m, t.persona.setting, hashSeed(t.id));
   };
@@ -206,7 +230,7 @@ export default function Studio() {
             {i > 0 && <span className="chev" aria-hidden>›</span>}
             <button
               className={`step ${step === s.n ? "on" : ""}`}
-              disabled={s.n > reached}
+              disabled={s.n > reached && !(HAS_PRODUCTION && s.n === 5)}
               onClick={() => goto(s.n)}
             >
               <span className="n">{s.n}</span>
@@ -277,11 +301,12 @@ export default function Studio() {
                   {g.members.map((m) => {
                     const order = selected.indexOf(m.id);
                     const full = order < 0 && selected.length >= count;
+                    const off = !castable(m.id);
                     return (
-                      <button key={m.id} className={`face ${order >= 0 ? "sel" : ""} ${full ? "dim" : ""}`} onClick={() => toggleCast(m.id)} aria-pressed={order >= 0}>
+                      <button key={m.id} className={`face ${order >= 0 ? "sel" : ""} ${full || off ? "dim" : ""}`} onClick={() => toggleCast(m.id)} aria-pressed={order >= 0} disabled={off}>
                         <Portrait member={m} size={200} />
                         {order >= 0 && <span className="order">{order + 1}</span>}
-                        <span className="face-meta"><b>{m.name}, {m.age}</b><small>{m.distinguishingMark}</small></span>
+                        <span className="face-meta"><b>{who(m)}</b><small>{detailOf(m)}</small></span>
                       </button>
                     );
                   })}
@@ -301,11 +326,12 @@ export default function Studio() {
               {takes.map((t) => {
                 const m = castById(t.persona.castId)!;
                 const keep = keepers.includes(t.id);
+                const canKeep = animatable(t);
                 return (
                   <article key={t.id} className={`take panel ${keep ? "keep" : ""}`}>
-                    <button className="take-media" onClick={() => setKeepers((k) => (keep ? k.filter((x) => x !== t.id) : [...k, t.id]))}>
-                      <StillFrame source={sourceFor(t)} />
-                      <span className={`keep-badge ${keep ? "on" : ""}`}>{keep ? "Keeper ✓" : "Keep"}</span>
+                    <button className="take-media" disabled={!canKeep} onClick={() => setKeepers((k) => (keep ? k.filter((x) => x !== t.id) : [...k, t.id]))}>
+                      <StillFrame source={sourceFor(t)} stillUrl={productionTake(t.id)?.still} />
+                      <span className={`keep-badge ${keep ? "on" : ""}`}>{!canKeep ? "Still only" : keep ? "Keeper ✓" : "Keep"}</span>
                     </button>
                     <div className="take-meta">
                       <b>{m.name}</b>
@@ -409,7 +435,7 @@ export default function Studio() {
               <div><h2>Ads</h2><p className="faint">Finished files, ready to traffic.</p></div>
               <button className="btn btn-ghost" onClick={() => goto(1)}>Make another</button>
             </div>
-            {ads.length === 0 && <p className="faint">Nothing rendered yet.</p>}
+            {ads.length === 0 && <p className="faint">Nothing rendered here yet.</p>}
             <div className="final-grid">
               {ads.map((a) => (
                 <article key={a.id} className="panel final">
@@ -422,6 +448,27 @@ export default function Studio() {
                 </article>
               ))}
             </div>
+            {HAS_PRODUCTION && (
+              <>
+                <div className="bar library-bar">
+                  <div><h2>From production</h2><p className="faint">{PRODUCTION.ads.length} finished ads the UGC Lab has made, favourites first.</p></div>
+                </div>
+                <div className="final-grid">
+                  {PRODUCTION.ads.map((a) => {
+                    const m = a.castId ? castById(a.castId) : undefined;
+                    return (
+                      <article key={a.id} className="panel final">
+                        <video src={a.video} poster={a.poster} controls playsInline loop preload="none" />
+                        <div className="take-meta">
+                          <b>{m ? m.name : "Production ad"}{a.favorite ? " ★" : ""}</b>
+                          <span className="faint">{a.hook}</span>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </>
+            )}
           </section>
         )}
       </main>

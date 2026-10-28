@@ -2,8 +2,10 @@ import { useMemo, useState } from "react";
 import "./landing.css";
 import Logo from "../components/Logo";
 import StudioWindow from "../components/StudioWindow";
+import ProductionReel from "../components/ProductionReel";
 import Portrait from "../components/Portrait";
-import { CAST_GROUPS, DEMO_BRAND } from "../demo/library";
+import { CAST_GROUPS, DEMO_BRAND, detailOf, HAS_PRODUCTION, PRODUCTION, who } from "../demo/library";
+import { takesFor } from "../demo/production";
 import { castCombinations, dealTakes, DIRECTION_OPTIONS, HOOKS } from "../engine";
 import { SOUNDS, TEMPO_SCREENS } from "../compose";
 
@@ -40,11 +42,14 @@ const STAGES = [
 
 export default function Landing() {
   const [promptOpen, setPromptOpen] = useState(false);
-  const sample = CAST_GROUPS[0].members[0];
-  const sampleTake = useMemo(
-    () => dealTakes({ cast: [sample], count: 1, pins: { adType: DIRECTION_OPTIONS.adTypes[0].key }, extraNotes: "", seed: 7 })[0],
-    [sample],
-  );
+  // From production: a real take with a clip and the prompts it was made from.
+  const sample = CAST_GROUPS.flatMap((g) => g.members).find((m) => !HAS_PRODUCTION || takesFor(m.id).some((t) => t.clip)) ?? CAST_GROUPS[0].members[0];
+  const sampleTake = useMemo(() => {
+    const real = HAS_PRODUCTION ? takesFor(sample.id).find((t) => t.clip) : undefined;
+    if (real) return { prompts: { still: real.stillPrompt, motion: real.motionPrompt }, clip: real.clip, still: real.still };
+    const dealtTake = dealTakes({ cast: [sample], count: 1, pins: { adType: DIRECTION_OPTIONS.adTypes[0].key }, extraNotes: "", seed: 7 })[0];
+    return { prompts: dealtTake.prompts, clip: null, still: null };
+  }, [sample]);
   const combos = castCombinations("male").toLocaleString("en-US");
   const tiles = CAST_GROUPS.flatMap((g) => g.members.slice(0, 2)).slice(0, 4);
   // The text tile shows three styles side by side, so it needs the short hooks.
@@ -60,6 +65,7 @@ export default function Landing() {
             <a href="#/" className="on">Home</a>
             <a href="#how">How it works</a>
             <a href="#yours">Make it yours</a>
+            {HAS_PRODUCTION && <a href="#ads">Real ads</a>}
             <a href="#cast">The cast</a>
           </nav>
           <a href="#/studio" className="btn btn-ghost btn-sm nav-cta">Open the demo</a>
@@ -89,7 +95,10 @@ export default function Landing() {
             </div>
           </div>
           <div className="laptop-base"><i /></div>
-          <p className="laptop-note faint">Live: the controls restyle the ad. Demo brand {DEMO_BRAND.name}, {DEMO_BRAND.tagline}.</p>
+          <p className="laptop-note faint">
+            Live: the controls restyle the ad.{" "}
+            {HAS_PRODUCTION ? `Real cast and clips from production; the app half is ${DEMO_BRAND.name}, ${DEMO_BRAND.tagline}.` : `Demo brand ${DEMO_BRAND.name}, ${DEMO_BRAND.tagline}.`}
+          </p>
         </div>
       </div>
 
@@ -97,8 +106,23 @@ export default function Landing() {
         <div><b>{combos}</b><span>distinct faces per gender in the cast decks</span></div>
         <div><b>0</b><span>language-model calls in casting or prompting</span></div>
         <div><b>1 : 1</b><span>every take stores the exact prompts it came from</span></div>
-        <div><b>~3s</b><span>reaction, then a hard cut to the product</span></div>
+        {HAS_PRODUCTION
+          ? <div><b>{PRODUCTION.ads.length}</b><span>finished ads made with it in production</span></div>
+          : <div><b>~3s</b><span>reaction, then a hard cut to the product</span></div>}
       </section>
+
+      {HAS_PRODUCTION && (
+        <section id="ads" className="real-ads wrap">
+          <div className="section-head">
+            <div className="eyebrow">Made with it</div>
+            <h2>Real ads, straight from production.</h2>
+            <p className="muted">
+              Every one of these was cast, posed, animated and cut by this pipeline for a live app. Tap a phone for sound.
+            </p>
+          </div>
+          <ProductionReel ads={PRODUCTION.ads.slice(0, 16)} />
+        </section>
+      )}
 
       <section id="yours" className="yours wrap">
         <div className="section-head">
@@ -160,13 +184,14 @@ export default function Landing() {
           <div className="prompt-head">
             <Portrait member={sample} size={96} className="prompt-face" />
             <div>
-              <div className="eyebrow">A real take, from the engine running in this page</div>
-              <div className="who">{sample.name}, {sample.age} · {sample.boneStructure} · {sample.distinguishingMark}</div>
+              <div className="eyebrow">{HAS_PRODUCTION ? "A real take from production, with the exact prompts it was made from" : "A real take, from the engine running in this page"}</div>
+              <div className="who">{who(sample)}</div>
             </div>
             <button className="btn btn-ghost btn-sm" onClick={() => setPromptOpen((o) => !o)}>{promptOpen ? "Hide prompts" : "Show the exact prompts"}</button>
           </div>
           {promptOpen && (
             <div className="prompts">
+              {sampleTake.clip && <video className="prompt-clip" src={sampleTake.clip} poster={sampleTake.still ?? undefined} muted loop playsInline autoPlay />}
               <div><div className="eyebrow">Still</div><pre>{sampleTake.prompts.still}</pre></div>
               <div><div className="eyebrow">Motion</div><pre>{sampleTake.prompts.motion}</pre></div>
             </div>
@@ -190,8 +215,8 @@ export default function Landing() {
       <section id="cast" className="cast wrap">
         <div className="section-head">
           <div className="eyebrow">The cast</div>
-          <h2>{CAST_GROUPS.reduce((n, g) => n + g.members.length, 0)} people, ready to shoot for {DEMO_BRAND.name}.</h2>
-          <p className="muted">None of them exist. Each was dealt by the engine, and each one can be cast into any setting, wardrobe and ad type.</p>
+          <h2>{CAST_GROUPS.reduce((n, g) => n + g.members.length, 0)} people, ready to shoot.</h2>
+          <p className="muted">None of them exist. {HAS_PRODUCTION ? "This is the production cast bank: every face was dealt by the engine and approved by a person before it was ever used." : "Each was dealt by the engine, and each one can be cast into any setting, wardrobe and ad type."}</p>
         </div>
         {CAST_GROUPS.map((g) => (
           <div key={g.type.key} className="cast-group">
@@ -200,7 +225,7 @@ export default function Landing() {
               {g.members.map((m) => (
                 <figure key={m.id}>
                   <Portrait member={m} size={180} />
-                  <figcaption><b>{m.name}, {m.age}</b><span className="faint">{m.distinguishingMark}</span></figcaption>
+                  <figcaption><b>{who(m)}</b><span className="faint">{detailOf(m)}</span></figcaption>
                 </figure>
               ))}
             </div>
@@ -210,7 +235,7 @@ export default function Landing() {
 
       <section className="cta wrap">
         <div className="cta-card panel">
-          <h2>Make a {DEMO_BRAND.name} ad yourself.</h2>
+          <h2>Make an ad yourself.</h2>
           <p className="muted">Pick who's on camera, set the direction, write the hook, choose the sound and the app screen it cuts to. {TEMPO_SCREENS.length} screens, {SOUNDS.length} sound beds, {DIRECTION_OPTIONS.settings.length} settings.</p>
           <a href="#/studio" className="btn btn-primary">Open the demo studio →</a>
         </div>
@@ -218,7 +243,7 @@ export default function Landing() {
 
       <footer className="foot wrap">
         <span className="foot-brand"><Logo /><span className="faint">built by Adrian Partain and Lucas Bennett</span></span>
-        <span className="faint">A demo of the UGC pipeline we run in production. {DEMO_BRAND.name} and its cast are fictional.</span>
+        <span className="faint">A demo of the UGC pipeline we run in production. The cast are not real people; {DEMO_BRAND.name} is a fictional app.</span>
       </footer>
     </div>
   );
