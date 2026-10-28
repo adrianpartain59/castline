@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import "./landing.css";
-import HeroCarousel from "../components/HeroCarousel";
+import Logo from "../components/Logo";
+import StudioWindow from "../components/StudioWindow";
 import Portrait from "../components/Portrait";
 import { CAST_GROUPS, DEMO_BRAND } from "../demo/library";
 import { castCombinations, dealTakes, DIRECTION_OPTIONS, HOOKS } from "../engine";
@@ -51,20 +52,22 @@ export default function Landing() {
 
   return (
     <div className="landing">
-      <header className="nav wrap">
-        <a href="#/" className="wordmark">Castline</a>
-        <nav>
-          <a href="#how">How it works</a>
-          <a href="#yours">Make it yours</a>
-          <a href="#cast">The cast</a>
-        </nav>
-        <a href="#/studio" className="btn btn-primary btn-sm">Open the demo</a>
-      </header>
+      <div className="top">
+        <div className="guides wrap" aria-hidden><i /><i /><i /><i /></div>
+        <header className="nav wrap">
+          <Logo />
+          <nav className="nav-pill">
+            <a href="#/" className="on">Home</a>
+            <a href="#how">How it works</a>
+            <a href="#yours">Make it yours</a>
+            <a href="#cast">The cast</a>
+          </nav>
+          <a href="#/studio" className="btn btn-ghost btn-sm nav-cta">Open the demo</a>
+        </header>
 
-      <section className="hero wrap">
-        <div className="hero-copy">
-          <div className="eyebrow">AI UGC hook ads</div>
-          <h1>UGC ads that look like a friend filmed them.</h1>
+        <section className="hero wrap">
+          <a href="#how" className="badge"><i />Built on the UGC pipeline we run in production<span>›</span></a>
+          <h1>UGC ads that look like<br />a friend filmed them.</h1>
           <p className="lede">
             Every take is a different person in a different room, reacting to your app, then cut
             straight into a real screen recording of it. Your characters, your words, your sound.
@@ -73,10 +76,22 @@ export default function Landing() {
             <a href="#/studio" className="btn btn-primary">Make one in the demo →</a>
             <a href="#how" className="btn btn-ghost">See how it works</a>
           </div>
-          <p className="faint small">Demo brand: {DEMO_BRAND.name}, {DEMO_BRAND.tagline}. Nothing in the demo is billed.</p>
+        </section>
+
+        <div className="laptop wrap">
+          <div className="laptop-lid">
+            <div className="laptop-screen">
+              <div className="browser-bar">
+                <span className="lights"><i /><i /><i /></span>
+                <span className="url">castline.app/studio/{DEMO_BRAND.name.toLowerCase()}</span>
+              </div>
+              <div className="laptop-app"><StudioWindow /></div>
+            </div>
+          </div>
+          <div className="laptop-base"><i /></div>
+          <p className="laptop-note faint">Live: the controls restyle the ad. Demo brand {DEMO_BRAND.name}, {DEMO_BRAND.tagline}.</p>
         </div>
-        <HeroCarousel />
-      </section>
+      </div>
 
       <section className="stats wrap">
         <div><b>{combos}</b><span>distinct faces per gender in the cast decks</span></div>
@@ -202,7 +217,7 @@ export default function Landing() {
       </section>
 
       <footer className="foot wrap">
-        <span>Castline · built by Adrian Partain and Lucas Bennett</span>
+        <span className="foot-brand"><Logo /><span className="faint">built by Adrian Partain and Lucas Bennett</span></span>
         <span className="faint">A demo of the UGC pipeline we run in production. {DEMO_BRAND.name} and its cast are fictional.</span>
       </footer>
     </div>

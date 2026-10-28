@@ -1,5 +1,4 @@
 .studio { min-height: 100vh; padding-bottom: 80px; }
-.studio .wordmark { font-weight: 800; font-size: 18px; letter-spacing: -.02em; text-decoration: none; background: linear-gradient(90deg, var(--brand-a), var(--brand-b)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .studio-top { display: flex; align-items: center; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--line); font-size: 13px; }
 .workspace { display: inline-flex; align-items: center; gap: 6px; font-weight: 650; }
 .workspace i { width: 14px; height: 14px; border-radius: 4px; background: #ff5a1f; }
@@ -85,7 +84,7 @@
 @keyframes fade { from { opacity: 0; } }
 .job { width: min(420px, calc(100vw - 32px)); padding: 22px; display: flex; flex-direction: column; gap: 12px; }
 .job-bar { height: 4px; background: var(--bg-sunken); border-radius: 2px; overflow: hidden; }
-.job-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-a), var(--accent-b)); transition: width .4s; }
+.job-bar i { display: block; height: 100%; background: var(--ink); transition: width .4s; }
 .job ul { list-style: none; padding: 0; margin: 0; font-size: 13.5px; display: flex; flex-direction: column; gap: 4px; color: var(--ink-3); }
 .job li.done { color: var(--ink-2); }
 .job li.now { color: var(--ink); }

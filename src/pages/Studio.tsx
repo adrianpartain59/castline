@@ -6,6 +6,7 @@ import { exportVideo, SOUNDS, TEMPO_SCREENS } from "../compose";
 import { CAST_GROUPS, castById, DEMO_BRAND, reactionFor } from "../demo/library";
 import SpotPlayer from "../components/SpotPlayer";
 import Portrait from "../components/Portrait";
+import Logo from "../components/Logo";
 import { ClipLoop, StillFrame } from "../components/ReactionView";
 
 type Step = 1 | 2 | 3 | 4 | 5;
@@ -193,7 +194,7 @@ export default function Studio() {
   return (
     <div className="studio">
       <header className="studio-top">
-        <a href="#/" className="wordmark">Castline</a>
+        <Logo />
         <span className="faint">Demo workspace</span>
         <span className="workspace"><i />{DEMO_BRAND.name}</span>
         <span className="pill-demo">Demo mode · nothing is billed</span>

@@ -1,76 +1,32 @@
-/* Castline site tokens. Dark is the house look; light follows the OS. */
+/* Castline site tokens. A light, quiet product-site look: white ground, ink
+   type, one dark primary button, grey for depth. */
 :root {
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", system-ui, sans-serif;
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, monospace;
 
-  --bg: #0b0b0e;
-  --bg-raised: #131318;
-  --bg-sunken: #08080a;
-  --line: #24242c;
-  --line-strong: #34343e;
-  --ink: #f4f4f7;
-  --ink-2: #a9a9b4;
-  --ink-3: #6e6e7a;
-  --accent-a: #7cc4ff;
-  --accent-b: #a98bff;
-  /* The wordmark gradient; darker in light mode so it holds contrast. */
-  --brand-a: #7cc4ff;
-  --brand-b: #a98bff;
-  --accent: #8fb4ff;
-  --accent-ink: #0b0b0e;
-  --accent-soft: rgba(124, 196, 255, 0.1);
-  --good: #3ccf91;
-  --phone-bezel: #1d1d22;
-  --shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  --bg: #fbfbfc;
+  --bg-raised: #ffffff;
+  --bg-sunken: #f2f2f5;
+  --bg-fade: #e9eaee;
+  --line: #e7e7ec;
+  --line-strong: #d6d6de;
+  --ink: #111114;
+  --ink-2: #55555f;
+  --ink-3: #8b8b96;
+  --accent: #111114;
+  --accent-ink: #ffffff;
+  --accent-soft: #f0f0f3;
+  --good: #1f9d55;
+  --phone-bezel: #111114;
+  --shadow: 0 30px 70px rgba(17, 17, 30, 0.16);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 30, 0.06), 0 2px 8px rgba(17, 17, 30, 0.04);
 
   --r-sm: 8px;
   --r-md: 12px;
-  --r-lg: 18px;
-  --r-xl: 28px;
+  --r-lg: 16px;
+  --r-xl: 24px;
   --r-pill: 999px;
 
-  color-scheme: dark;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --bg: #f6f6f8;
-    --bg-raised: #ffffff;
-    --bg-sunken: #ececf0;
-    --line: #e2e2e8;
-    --line-strong: #cfcfd8;
-    --ink: #111116;
-    --ink-2: #55555f;
-    --ink-3: #8a8a95;
-    --accent: #3d6fe0;
-    --brand-a: #2f6fe0;
-    --brand-b: #7a4fe6;
-    --accent-ink: #ffffff;
-    --accent-soft: rgba(61, 111, 224, 0.08);
-    --good: #12935e;
-    --phone-bezel: #111116;
-    --shadow: 0 30px 70px rgba(20, 20, 40, 0.18);
-    color-scheme: light;
-  }
-}
-
-:root[data-theme="light"] {
-  --bg: #f6f6f8;
-  --bg-raised: #ffffff;
-  --bg-sunken: #ececf0;
-  --line: #e2e2e8;
-  --line-strong: #cfcfd8;
-  --ink: #111116;
-  --ink-2: #55555f;
-  --ink-3: #8a8a95;
-  --accent: #3d6fe0;
-  --brand-a: #2f6fe0;
-  --brand-b: #7a4fe6;
-  --accent-ink: #ffffff;
-  --accent-soft: rgba(61, 111, 224, 0.08);
-  --good: #12935e;
-  --phone-bezel: #111116;
-  --shadow: 0 30px 70px rgba(20, 20, 40, 0.18);
   color-scheme: light;
 }
 
@@ -87,7 +43,7 @@ a { color: inherit; }
 button { font: inherit; color: inherit; }
 img, canvas, video { display: block; max-width: 100%; }
 
-.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 @media (max-width: 640px) { .wrap { padding: 0 16px; } }
 
 /* ---- buttons ---- */
@@ -95,26 +51,32 @@ img, canvas, video { display: block; max-width: 100%; }
   display: inline-flex; align-items: center; gap: 8px;
   border: 0; cursor: pointer; text-decoration: none;
   border-radius: var(--r-pill); padding: 12px 20px;
-  font-weight: 650; font-size: 15px; transition: transform .15s, opacity .15s;
+  font-weight: 560; font-size: 15px; letter-spacing: -.01em; transition: transform .15s, opacity .15s;
 }
 .btn:active { transform: scale(0.98); }
 .btn:disabled { opacity: .45; cursor: default; }
-.btn-primary { background: linear-gradient(90deg, var(--accent-a), var(--accent-b)); color: #0b0b0e; }
-.btn-ghost { background: transparent; border: 1px solid var(--line-strong); color: var(--ink); }
+.btn-primary { background: var(--ink); color: #fff; box-shadow: 0 1px 0 rgba(255, 255, 255, .12) inset, 0 4px 14px rgba(17, 17, 20, .18); }
+.btn-primary:hover { background: #26262b; }
+.btn-ghost { background: var(--bg-raised); border: 1px solid var(--line-strong); color: var(--ink); box-shadow: var(--shadow-sm); }
+.btn-ghost:hover { border-color: var(--ink-3); }
 .btn-sm { padding: 8px 14px; font-size: 13px; }
 
 .chip {
   display: inline-flex; align-items: center; gap: 6px;
-  border: 1px solid var(--line-strong); background: transparent;
+  border: 1px solid var(--line); background: var(--bg-raised);
   border-radius: var(--r-pill); padding: 6px 12px; font-size: 13px;
   cursor: pointer; color: var(--ink-2); transition: all .15s;
 }
 .chip:hover { color: var(--ink); }
-.chip[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.chip[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); background: var(--accent-soft); font-weight: 560; }
 
 /* Archetype plurals come from the engine in sentence case ("weekend runners"). */
 .cap { display: inline-block; }
 .cap::first-letter { text-transform: uppercase; }
+
+/* ---- logo ---- */
+.wordmark { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 18px; letter-spacing: -.03em; text-decoration: none; color: var(--ink); }
+.wordmark svg { width: 22px; height: 22px; }
 
 .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
 .muted { color: var(--ink-2); }

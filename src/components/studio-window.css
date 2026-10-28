@@ -1,0 +1,50 @@
+/* The studio's compose screen as it sits inside the hero laptop. Sized for
+   the laptop's screen; below 900px the side rails drop away. */
+.sw {
+  display: grid; grid-template-columns: 188px 1fr 290px; height: 100%;
+  background: var(--bg-raised); color: var(--ink); font-size: 13px; text-align: left;
+}
+.sw-eyebrow { font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+
+.sw-side { border-right: 1px solid var(--line); padding: 14px 10px; display: flex; flex-direction: column; gap: 14px; background: #fcfcfd; }
+.sw-ws { display: flex; align-items: center; gap: 8px; font-weight: 600; padding: 4px 6px; }
+.sw-ws i { width: 18px; height: 18px; border-radius: 5px; background: #ff5a1f; }
+.sw-ws span { margin-left: auto; font-size: 10.5px; color: var(--ink-3); font-weight: 500; }
+.sw-side nav { display: flex; flex-direction: column; gap: 2px; }
+.sw-side nav span, .sw-side-foot span { padding: 7px 8px; border-radius: 7px; color: var(--ink-2); }
+.sw-side nav span.on { background: var(--bg-sunken); color: var(--ink); font-weight: 600; }
+.sw-side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 2px; }
+.sw-side-foot .sw-eyebrow { padding: 0 8px 4px; }
+
+.sw-main { display: flex; flex-direction: column; min-width: 0; background: var(--bg-sunken); }
+.sw-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--line); background: var(--bg-raised); }
+.sw-crumb { font-size: 11.5px; color: var(--ink-3); }
+.sw-head b { font-size: 14px; font-weight: 600; letter-spacing: -.01em; }
+.sw-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink-2); border: 1px solid var(--line); border-radius: var(--r-pill); padding: 3px 9px; background: var(--bg-raised); }
+.sw-pill i { width: 6px; height: 6px; border-radius: 50%; background: var(--good); box-shadow: 0 0 0 3px rgba(31, 157, 85, .15); }
+
+.sw-stage { flex: 1; display: flex; align-items: center; justify-content: center; gap: 22px; padding: 16px; min-height: 0; }
+.sw-phone { position: relative; height: 100%; max-height: 470px; aspect-ratio: 9 / 16.4; }
+.sw-phone .phone { height: 100%; border-radius: 30px; padding: 7px; box-shadow: 0 18px 40px rgba(17, 17, 30, .22); }
+.sw-phone .phone > .screen { border-radius: 24px; }
+.sw-phone .phone .island { top: 12px; height: 16px; }
+.sw-phone .sound-toggle { bottom: 14px; right: 12px; font-size: 11px; }
+.sw-takes { display: flex; flex-direction: column; gap: 6px; }
+.sw-takes button { display: flex; align-items: center; gap: 8px; border: 1px solid transparent; background: none; padding: 4px 8px 4px 4px; border-radius: 10px; cursor: pointer; color: var(--ink-2); font-size: 12px; }
+.sw-takes button img { width: 30px; height: 38px; object-fit: cover; border-radius: 7px; }
+.sw-takes button.on { background: var(--bg-raised); border-color: var(--line); color: var(--ink); font-weight: 600; box-shadow: var(--shadow-sm); }
+
+.sw-panel { border-left: 1px solid var(--line); padding: 16px; display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
+.sw-panel .sw-eyebrow { margin-top: 6px; }
+.sw-panel input { width: 100%; border: 1px solid var(--line-strong); border-radius: 9px; padding: 8px 10px; font: inherit; font-size: 13px; color: var(--ink); background: var(--bg-raised); outline: 0; }
+.sw-panel input:focus { border-color: var(--ink); }
+.sw-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.sw-chips .chip { padding: 4px 10px; font-size: 12px; }
+.sw-timeline { display: flex; height: 30px; border-radius: 7px; overflow: hidden; font-size: 11px; font-weight: 600; color: #fff; }
+.sw-timeline div { display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden; }
+.sw-timeline div:first-child { background: #3a3a42; }
+.sw-timeline div:last-child { background: #ff5a1f; }
+.sw-cta { margin-top: auto; justify-content: center; font-size: 13.5px; padding: 10px 14px; }
+
+@media (max-width: 1000px) { .sw { grid-template-columns: 1fr 260px; } .sw-side { display: none; } }
+@media (max-width: 720px) { .sw { grid-template-columns: 1fr; } .sw-panel { display: none; } .sw-takes { display: none; } }
