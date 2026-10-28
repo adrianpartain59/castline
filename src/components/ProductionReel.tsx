@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./production-reel.css";
 import type { ProductionAd } from "../demo/production";
+import Iphone from "./Iphone";
 
 /**
  * Finished ads from production in a row of phones. Each one plays muted only
@@ -38,11 +39,15 @@ function ReelPhone({ ad, audible, onToggle }: { ad: ProductionAd; audible: boole
   return (
     <figure className="reel-item" role="listitem">
       <button className="reel-phone" onClick={onToggle} aria-label={audible ? "Mute" : "Play with sound"}>
-        <video ref={ref} src={ad.video} poster={ad.poster} muted loop playsInline preload="none" />
+        <Iphone>
+          <video ref={ref} src={ad.video} poster={ad.poster} muted loop playsInline preload="none" />
+        </Iphone>
         <span className="reel-sound">{audible ? "Sound on" : "Sound off"}</span>
-        {ad.favorite && <span className="reel-fav">★ Team favourite</span>}
       </button>
-      <figcaption>{ad.hook}</figcaption>
+      <figcaption>
+        {ad.favorite && <span className="reel-fav">★ Team favourite</span>}
+        {ad.hook}
+      </figcaption>
     </figure>
   );
 }

@@ -1,0 +1,25 @@
+.hp { display: flex; align-items: center; justify-content: center; gap: 28px; }
+.hp-eyebrow { font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; padding: 0 8px 6px; }
+
+.hp-list { display: flex; flex-direction: column; gap: 6px; }
+.hp-list button {
+  display: flex; align-items: center; gap: 10px; border: 1px solid transparent; background: none;
+  padding: 5px 12px 5px 5px; border-radius: 12px; cursor: pointer; color: var(--ink-2); font-size: 13px; text-align: left;
+  transition: background .15s, border-color .15s;
+}
+.hp-list button img { width: 34px; height: 44px; object-fit: cover; border-radius: 8px; }
+.hp-list button:hover { color: var(--ink); }
+.hp-list button.on { background: var(--bg-raised); border-color: var(--line); color: var(--ink); font-weight: 600; box-shadow: var(--shadow-sm); }
+
+/* Fits the first screen: the phone is about 2.09 times as tall as it is wide. */
+.hp-device { position: relative; width: min(290px, 70vw, calc((100svh - 230px) / 2.09)); min-width: 220px; }
+.hp-phone { position: relative; }
+.hp-sound { right: 9%; bottom: 4.5%; }
+.hp-caption { margin-top: 18px; text-align: center; font-size: 13px; color: var(--ink-3); }
+
+@media (max-width: 640px) {
+  .hp { flex-direction: column-reverse; gap: 18px; }
+  .hp-list { flex-direction: row; overflow-x: auto; max-width: 100%; }
+  .hp-list button span, .hp-eyebrow { display: none; }
+  .hp-list button { padding: 4px; }
+}

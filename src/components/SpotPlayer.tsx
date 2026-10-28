@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { ComposeSpec } from "../contracts";
 import { Compositor } from "../compose";
+import Iphone from "./Iphone";
 
 interface Props {
   spec: ComposeSpec;
@@ -62,11 +63,9 @@ export default function SpotPlayer({ spec, playing = true, onTime, width = 540, 
   }, [muted]);
 
   return (
-    <div className={`phone ${className ?? ""}`}>
-      <div className="island" />
-      <div className="screen">
-        <canvas ref={canvasRef} width={width} height={Math.round((width * 16) / 9)} />
-      </div>
-    </div>
+    <Iphone className={className}>
+      {/* Drawn at the iPhone 17 screen's own 1206:2622 shape, as the ad plays in a feed. */}
+      <canvas ref={canvasRef} width={width} height={Math.round((width * 2622) / 1206)} />
+    </Iphone>
   );
 }

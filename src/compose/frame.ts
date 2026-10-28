@@ -64,7 +64,10 @@ export function renderFrame(
   h: number,
   sources: FrameSources = {},
 ): void {
-  const box = fitPortrait(w, h);
+  // A canvas taller than 9:16 is a phone screen showing the ad in a feed: the
+  // reaction fills it edge to edge and the app is drawn at the phone's own
+  // shape. Anything else (the 1080×1920 export) gets the exact 9:16 frame.
+  const box = h / w > 16 / 9 ? { x: 0, y: 0, w, h } : fitPortrait(w, h);
   if (box.w !== w || box.h !== h) {
     ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, w, h);

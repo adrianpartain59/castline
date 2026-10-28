@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import "./landing.css";
 import Logo from "../components/Logo";
-import StudioWindow from "../components/StudioWindow";
+import HeroPhone from "../components/HeroPhone";
 import ProductionReel from "../components/ProductionReel";
 import Portrait from "../components/Portrait";
 import { CAST_GROUPS, DEMO_BRAND, detailOf, HAS_PRODUCTION, PRODUCTION, who } from "../demo/library";
@@ -63,8 +63,8 @@ export default function Landing() {
           <Logo />
           <nav className="nav-pill">
             <a href="#/" className="on">Home</a>
+            <a href="#why">Why AI</a>
             <a href="#how">How it works</a>
-            <a href="#yours">Make it yours</a>
             {HAS_PRODUCTION && <a href="#ads">Real ads</a>}
             <a href="#cast">The cast</a>
           </nav>
@@ -72,52 +72,86 @@ export default function Landing() {
         </header>
 
         <section className="hero wrap">
-          <a href="#how" className="badge"><i />Built on the UGC pipeline we run in production<span>›</span></a>
-          <h1>UGC ads that look like<br />a friend filmed them.</h1>
-          <p className="lede">
-            Every take is a different person in a different room, reacting to your app, then cut
-            straight into a real screen recording of it. Your characters, your words, your sound.
-          </p>
-          <div className="hero-ctas">
-            <a href="#/studio" className="btn btn-primary">Make one in the demo →</a>
-            <a href="#how" className="btn btn-ghost">See how it works</a>
-          </div>
-        </section>
-
-        <div className="laptop wrap">
-          <div className="laptop-lid">
-            <div className="laptop-screen">
-              <div className="browser-bar">
-                <span className="lights"><i /><i /><i /></span>
-                <span className="url">castline.app/studio/{DEMO_BRAND.name.toLowerCase()}</span>
-              </div>
-              <div className="laptop-app"><StudioWindow /></div>
+          <div className="hero-copy">
+            <a href="#why" className="badge"><i />Every face here is AI. None of them are real people.<span>›</span></a>
+            <h1>Test every ad idea before you pay a creator.</h1>
+            <p className="lede">
+              Castline makes UGC hook ads with AI people who don't exist: a reaction that looks like a
+              friend filmed it, then a hard cut to your app. Each take costs under a dollar, so you can
+              run dozens of variations, find the features people actually stop for, and only then
+              bring in creators for the winners.
+            </p>
+            <div className="hero-ctas">
+              <a href="#/studio" className="btn btn-primary">Make one in the demo →</a>
+              <a href="#how" className="btn btn-ghost">See how it works</a>
             </div>
+            <p className="hero-note faint">
+              {HAS_PRODUCTION
+                ? `Every person on this page is AI-generated, straight out of our production pipeline. The app it cuts to is ${DEMO_BRAND.name}, ${DEMO_BRAND.tagline}.`
+                : `Every person on this page is AI-generated. Demo brand: ${DEMO_BRAND.name}, ${DEMO_BRAND.tagline}.`}
+            </p>
           </div>
-          <div className="laptop-base"><i /></div>
-          <p className="laptop-note faint">
-            Live: the controls restyle the ad.{" "}
-            {HAS_PRODUCTION ? `Real cast and clips from production; the app half is ${DEMO_BRAND.name}, ${DEMO_BRAND.tagline}.` : `Demo brand ${DEMO_BRAND.name}, ${DEMO_BRAND.tagline}.`}
-          </p>
-        </div>
+          <HeroPhone />
+        </section>
       </div>
 
       <section className="stats wrap">
-        <div><b>{combos}</b><span>distinct faces per gender in the cast decks</span></div>
-        <div><b>0</b><span>language-model calls in casting or prompting</span></div>
-        <div><b>1 : 1</b><span>every take stores the exact prompts it came from</span></div>
+        <div><b>&lt; $1</b><span>per take: one AI still and a 4-second clip</span></div>
+        <div><b>{combos}</b><span>different AI faces per gender, none of them real</span></div>
+        <div><b>0</b><span>creators needed to test a concept</span></div>
         {HAS_PRODUCTION
-          ? <div><b>{PRODUCTION.ads.length}</b><span>finished ads made with it in production</span></div>
-          : <div><b>~3s</b><span>reaction, then a hard cut to the product</span></div>}
+          ? <div><b>{PRODUCTION.ads.length}</b><span>ads already made with it in production</span></div>
+          : <div><b>8</b><span>takes, eight different people, from one idea</span></div>}
+      </section>
+
+      <section id="why" className="why wrap">
+        <div className="section-head">
+          <div className="eyebrow">Why AI UGC</div>
+          <h2>Find what sells before anyone films anything.</h2>
+          <p className="muted">
+            Creator UGC is the best-performing ad format there is, and the slowest and most expensive
+            to test. Castline moves the testing in front of the creators.
+          </p>
+        </div>
+        <div className="tri">
+          <article className="why-card panel">
+            <span className="why-num">01</span>
+            <h3>Nobody here is real.</h3>
+            <p className="muted">
+              Every face is generated by AI from a cast bank of people who don't exist. No talent fees,
+              no usage rights to negotiate, no reshoots, and the ads carry an AI label wherever a
+              platform asks for one.
+            </p>
+          </article>
+          <article className="why-card panel">
+            <span className="why-num">02</span>
+            <h3>Cheap enough to waste.</h3>
+            <p className="muted">
+              A take is one AI still and a few seconds of video, so it costs under a dollar. Make eight
+              people react to the same hook, try five hooks, cut to three features: dozens of
+              variations for less than one creator video.
+            </p>
+          </article>
+          <article className="why-card panel">
+            <span className="why-num">03</span>
+            <h3>Learn which feature sells.</h3>
+            <p className="muted">
+              Same person, same hook, a different feature after the cut. Put the variations in front of
+              real traffic, keep the feature people stop for, and brief your creators on the proven
+              winner instead of a guess.
+            </p>
+          </article>
+        </div>
       </section>
 
       {HAS_PRODUCTION && (
         <section id="ads" className="real-ads wrap">
           <div className="section-head">
             <div className="eyebrow">Made with it</div>
-            <h2>Real ads, straight from production.</h2>
+            <h2>Ads we actually ran. Nobody in them exists.</h2>
             <p className="muted">
-              Every one of these was cast, posed, animated and cut by this pipeline for a live app. Tap a phone for sound.
+              Every person in these ads is AI-generated. Each one was cast, posed, animated and cut by
+              this pipeline to test hooks for a live app. Tap a phone for sound.
             </p>
           </div>
           <ProductionReel ads={PRODUCTION.ads.slice(0, 16)} />
@@ -128,7 +162,7 @@ export default function Landing() {
         <div className="section-head">
           <div className="eyebrow">Make it yours</div>
           <h2>Same pipeline, your brand.</h2>
-          <p className="muted">The machinery is identical for every brand. Three things change, and each one takes a few clicks.</p>
+          <p className="muted">The machinery is identical for every brand. Three things change, each in a few clicks, and every change is another variation to test.</p>
         </div>
         <div className="tri">
           <article className="tile panel">
@@ -136,7 +170,7 @@ export default function Landing() {
               {tiles.map((m) => <Portrait key={m.id} member={m} size={120} />)}
             </div>
             <h3>Characters</h3>
-            <p className="muted">Describe the person in your own words, or deal a whole cast of the archetype your audience responds to. Eight takes are eight different people, never one face eight times.</p>
+            <p className="muted">Describe the AI person in your own words, or deal a whole cast of the archetype your audience responds to. Eight takes are eight different people, never one face eight times.</p>
             <div className="tags"><span>age</span><span>look</span><span>wardrobe</span><span>setting</span><span>archetype</span></div>
           </article>
           <article className="tile panel">
@@ -215,7 +249,7 @@ export default function Landing() {
       <section id="cast" className="cast wrap">
         <div className="section-head">
           <div className="eyebrow">The cast</div>
-          <h2>{CAST_GROUPS.reduce((n, g) => n + g.members.length, 0)} people, ready to shoot.</h2>
+          <h2>{CAST_GROUPS.reduce((n, g) => n + g.members.length, 0)} AI people, ready to shoot.</h2>
           <p className="muted">None of them exist. {HAS_PRODUCTION ? "This is the production cast bank: every face was dealt by the engine and approved by a person before it was ever used." : "Each was dealt by the engine, and each one can be cast into any setting, wardrobe and ad type."}</p>
         </div>
         {CAST_GROUPS.map((g) => (
@@ -235,15 +269,15 @@ export default function Landing() {
 
       <section className="cta wrap">
         <div className="cta-card panel">
-          <h2>Make an ad yourself.</h2>
-          <p className="muted">Pick who's on camera, set the direction, write the hook, choose the sound and the app screen it cuts to. {TEMPO_SCREENS.length} screens, {SOUNDS.length} sound beds, {DIRECTION_OPTIONS.settings.length} settings.</p>
+          <h2>Test your next concept tonight.</h2>
+          <p className="muted">Pick an AI person, write a hook, choose which feature it cuts to and the sound under it, then export. Change any one of them and you have the next variation: {TEMPO_SCREENS.length} features, {SOUNDS.length} sound beds and as many hooks as you can write.</p>
           <a href="#/studio" className="btn btn-primary">Open the demo studio →</a>
         </div>
       </section>
 
       <footer className="foot wrap">
         <span className="foot-brand"><Logo /><span className="faint">built by Adrian Partain and Lucas Bennett</span></span>
-        <span className="faint">A demo of the UGC pipeline we run in production. The cast are not real people; {DEMO_BRAND.name} is a fictional app.</span>
+        <span className="faint">Every person shown is AI-generated and does not exist. {DEMO_BRAND.name} is a fictional app.</span>
       </footer>
     </div>
   );

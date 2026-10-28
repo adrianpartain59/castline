@@ -82,16 +82,6 @@ img, canvas, video { display: block; max-width: 100%; }
 .muted { color: var(--ink-2); }
 .faint { color: var(--ink-3); }
 
-/* ---- phone frame ---- */
-.phone {
-  /* The screen inside the bezel is exactly 9:16, the ad's own ratio. */
-  position: relative; aspect-ratio: 9 / 16.4; border-radius: 40px;
-  background: var(--phone-bezel); padding: 10px; box-shadow: var(--shadow);
-}
-.phone > .screen { position: relative; width: 100%; height: 100%; border-radius: 34px; overflow: hidden; background: #000; }
-.phone > .screen canvas { width: 100%; height: 100%; object-fit: cover; }
-.phone .island { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); width: 30%; height: 22px; border-radius: 12px; background: #000; z-index: 2; }
-
 .sound-toggle {
   position: absolute; z-index: 3; right: 10px; bottom: 18px;
   border: 0; border-radius: var(--r-pill); padding: 6px 12px; font-size: 12px; font-weight: 600;
