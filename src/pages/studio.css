@@ -75,11 +75,11 @@
 .sliders { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: var(--ink-2); margin-bottom: 8px; }
 .sliders label { display: flex; align-items: center; gap: 8px; }
 
-.ad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-@media (max-width: 900px) { .ad-grid { grid-template-columns: repeat(2, 1fr); } }
-.ad { padding: 10px; display: flex; flex-direction: column; gap: 10px; }
-.ad video { width: 100%; aspect-ratio: 9 / 16; border-radius: var(--r-md); background: #000; }
-.ad .btn { align-self: flex-start; margin-top: 6px; }
+.final-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 900px) { .final-grid { grid-template-columns: repeat(2, 1fr); } }
+.final { padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+.final video { width: 100%; aspect-ratio: 9 / 16; border-radius: var(--r-md); background: #000; }
+.final .btn { align-self: flex-start; margin-top: 6px; }
 
 .job-scrim { position: fixed; inset: 0; background: rgba(0, 0, 0, .5); display: grid; place-items: center; z-index: 50; animation: fade .2s; }
 @keyframes fade { from { opacity: 0; } }

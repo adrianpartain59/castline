@@ -4,7 +4,7 @@ import type { CastMember, ComposeSpec, Gender, SoundChoice, Take, TempoScreenKey
 import { dealTakes, DIRECTION_OPTIONS, GESTURE_OPTIONS, HOOKS } from "../engine";
 import { exportVideo, SOUNDS, TEMPO_SCREENS } from "../compose";
 import { CAST_GROUPS, castById, DEMO_BRAND, reactionFor } from "../demo/library";
-import AdPlayer from "../components/AdPlayer";
+import SpotPlayer from "../components/SpotPlayer";
 import Portrait from "../components/Portrait";
 import { ClipLoop, StillFrame } from "../components/ReactionView";
 
@@ -347,7 +347,7 @@ export default function Studio() {
           <section className="compose">
             <div className="compose-preview">
               <div style={{ position: "relative" }}>
-                <AdPlayer spec={spec} muted={!soundOn} />
+                <SpotPlayer spec={spec} muted={!soundOn} />
                 <button className="sound-toggle" onClick={() => setSoundOn((s) => !s)} aria-pressed={soundOn}>
                   {soundOn ? "Sound on" : "Sound off"}
                 </button>
@@ -409,9 +409,9 @@ export default function Studio() {
               <button className="btn btn-ghost" onClick={() => goto(1)}>Make another</button>
             </div>
             {ads.length === 0 && <p className="faint">Nothing rendered yet.</p>}
-            <div className="ad-grid">
+            <div className="final-grid">
               {ads.map((a) => (
-                <article key={a.id} className="panel ad">
+                <article key={a.id} className="panel final">
                   <video src={a.url} controls playsInline loop />
                   <div className="take-meta">
                     <b>{a.member.name}</b>

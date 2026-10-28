@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import AdPlayer from "./AdPlayer";
+import SpotPlayer from "./SpotPlayer";
 import { showcaseSpecs } from "../demo/library";
 
 /**
@@ -27,7 +27,7 @@ export default function HeroCarousel() {
       <div className="hero-stack">
         <div className="hero-ghost left" aria-hidden />
         <div className="hero-ghost right" aria-hidden />
-        <AdPlayer spec={current.spec} onTime={onTime} muted={!soundOn} className="hero-phone" />
+        <SpotPlayer spec={current.spec} onTime={onTime} muted={!soundOn} className="hero-phone" />
         <button className="sound-toggle" onClick={() => setSoundOn((s) => !s)} aria-pressed={soundOn}>
           {soundOn ? "Sound on" : "Sound off"}
         </button>

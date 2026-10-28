@@ -15,7 +15,7 @@ interface Props {
 }
 
 /** A phone-shaped live preview of one ad, drawn by the real compositor. */
-export default function AdPlayer({ spec, playing = true, onTime, width = 540, className, muted = true }: Props) {
+export default function SpotPlayer({ spec, playing = true, onTime, width = 540, className, muted = true }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const compRef = useRef<Compositor | null>(null);
   const onTimeRef = useRef(onTime);
