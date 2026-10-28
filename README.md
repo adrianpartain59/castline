@@ -1,14 +1,18 @@
 # Castline
 
-**AI UGC hook ads that look like a friend filmed them.** A 3-second selfie
-reaction from a person who doesn't exist, a hard cut into a real screen
-recording of the app, platform-native hook text and a sound bed. Every take is
-a different person in a different room.
+**Test every ad idea before you pay a creator.** Castline makes UGC hook ads
+with AI people who don't exist: a 3-second selfie reaction that looks like a
+friend filmed it, then a hard cut into a real screen recording of the app.
+Each take costs under a dollar, so you can run dozens of variations, learn
+which features people actually stop for, and brief creators on the winner.
 
-This repo is a demo of the UGC pipeline we built and run in production, dressed
-up on a fictional brand: **Tempo**, a running app (the same fictional app as
-[Tenfold](https://github.com/adrianpartain59/tenfold)'s demo). The cast, the
-footage and the brand are all made up.
+**[Open the live demo →](https://adrianpartain59.github.io/castline/)**
+
+This is a demo of the UGC pipeline we built and run in production. Every
+person on the site is AI-generated. The cast, stills, clips and finished ads
+are real output from that pipeline; the app the demo cuts to is **Tempo**, a
+fictional running app (the same one as
+[Tenfold](https://github.com/adrianpartain59/tenfold)'s demo).
 
 ## What's in it
 
@@ -41,7 +45,9 @@ cast member and setting to its clip).
 The cast, stills, clips and finished ads on the site are the real ones from
 the production UGC Lab, imported read-only by
 `scripts/import/import-ugc-lab.cjs` into `public/library/production/` and
-`src/demo/production.json` (web-sized: 720-wide H.264, JPEG stills). Takes the
+`src/demo/production.json` (web-sized: 720-wide H.264, JPEG stills). The
+finished ads are published without sound: their music came from the Meta
+Sound Collection, which is licensed for Meta placements only. Takes the
 lab never animated show as "Still only" in the studio. Without the import the
 site falls back to the engine-dealt Tempo cast below.
 

@@ -4,12 +4,7 @@
   scrollbar-width: thin;
 }
 .reel-item { margin: 0; scroll-snap-align: start; display: flex; flex-direction: column; gap: 10px; }
-.reel-phone { position: relative; display: block; width: 100%; border: 0; padding: 0 4px; background: none; cursor: pointer; }
-.reel-sound {
-  position: absolute; font-size: 11px; font-weight: 600; border-radius: var(--r-pill); padding: 4px 9px;
-  background: rgba(0, 0, 0, .55); color: #fff; backdrop-filter: blur(6px);
-}
-.reel-sound { right: 22px; bottom: 26px; }
+.reel-phone { position: relative; padding: 0 4px; }
 .reel-fav { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
 .reel-item figcaption { font-size: 13px; color: var(--ink-2); line-height: 1.4; }
 @media (max-width: 640px) { .reel { grid-auto-columns: 62vw; } }

@@ -151,7 +151,7 @@ export default function Landing() {
             <h2>Ads we actually ran. Nobody in them exists.</h2>
             <p className="muted">
               Every person in these ads is AI-generated. Each one was cast, posed, animated and cut by
-              this pipeline to test hooks for a live app. Tap a phone for sound.
+              this pipeline to test hooks for a live app.
             </p>
           </div>
           <ProductionReel ads={PRODUCTION.ads.slice(0, 16)} />

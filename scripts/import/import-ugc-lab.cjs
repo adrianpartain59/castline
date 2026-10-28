@@ -159,7 +159,9 @@ async function main() {
     const posterFile = path.join(OUT, "ads", `${a.id}.jpg`);
     if (!fs.existsSync(dest)) {
       const src = await download(a.id, file.filename);
-      video(src, dest, { audio: true });
+      // Silent on purpose: the ads' music is from the Meta Sound Collection,
+      // licensed for Meta placements, not for a public website.
+      video(src, dest, { audio: false });
       poster(src, posterFile);
     }
     out.ads.push({
