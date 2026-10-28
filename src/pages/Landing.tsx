@@ -68,7 +68,10 @@ export default function Landing() {
             {HAS_PRODUCTION && <a href="#ads">Real ads</a>}
             <a href="#cast">The cast</a>
           </nav>
-          <a href="#/studio" className="btn btn-ghost btn-sm nav-cta">Open the demo</a>
+          <div className="nav-right">
+            <a href="https://adrianpartain.com" className="nav-home">← adrianpartain.com</a>
+            <a href="#/studio" className="btn btn-ghost btn-sm nav-cta">Open the demo</a>
+          </div>
         </header>
 
         <section className="hero wrap">
@@ -276,7 +279,7 @@ export default function Landing() {
       </section>
 
       <footer className="foot wrap">
-        <span className="foot-brand"><Logo /><span className="faint">built by Adrian Partain and Lucas Bennett</span></span>
+        <span className="foot-brand"><Logo /><span className="faint">built by <a href="https://adrianpartain.com">Adrian Partain</a> and Lucas Bennett</span></span>
         <span className="faint">Every person shown is AI-generated and does not exist. {DEMO_BRAND.name} is a fictional app.</span>
       </footer>
     </div>

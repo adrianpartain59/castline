@@ -6,7 +6,7 @@ friend filmed it, then a hard cut into a real screen recording of the app.
 Each take costs under a dollar, so you can run dozens of variations, learn
 which features people actually stop for, and brief creators on the winner.
 
-**[Open the live demo →](https://castline.adrianpartain.com)**
+**[Open the live demo →](https://adrianpartain.com/castline/)**
 
 This is a demo of the UGC pipeline we built and run in production. Every
 person on the site is AI-generated. The cast, stills, clips and finished ads
