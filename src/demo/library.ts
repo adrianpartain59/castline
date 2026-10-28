@@ -1,75 +1,68 @@
-// The demo workspace: Tempo's pre-loaded cast and the footage rendered for it.
-//
-// The cast is dealt by the real engine from fixed seeds, so every visitor sees
-// the same people and the prompts shown in the studio are the ones the footage
-// was (or will be) rendered from. Footage is looked up in footage.json, which
-// the render script fills in; anything not rendered yet falls back to the
-// in-browser placeholder.
+// The demo workspace: the cast, the footage library plan, and the rendered
+// files. footage.json is written by `npm run render -- publish`; anything not
+// rendered yet falls back to the in-browser placeholder.
 
-import type { CastMember, CastType, ComposeSpec, ReactionSource } from "../contracts";
-import { CAST_TYPES, dealCast, DIRECTION_OPTIONS, HOOKS } from "../engine";
+import type { CastMember, ComposeSpec, ReactionSource } from "../contracts";
+import { HOOKS } from "../engine";
+import { CAST_GROUPS } from "./cast";
+import { libraryPlan, takeKey } from "./plan";
 import footage from "./footage.json";
 
-export const DEMO_BRAND = {
-  name: "Tempo",
-  tagline: "a fictional running app",
-} as const;
+export { ALL_CAST, CAST_GROUPS, castById, DEMO_BRAND } from "./cast";
+export type { CastGroup } from "./cast";
 
-const PER_TYPE = 6;
-
-export interface CastGroup {
-  type: CastType;
-  members: CastMember[];
+interface Footage {
+  /** castId → portrait image */
+  portraits: Record<string, string>;
+  /** take key → approved still */
+  stills: Record<string, string>;
+  /** take key → finished clip */
+  clips: Record<string, string>;
 }
 
-export const CAST_GROUPS: CastGroup[] = CAST_TYPES.map((type, i) => ({
-  type,
-  members: dealCast({
-    count: PER_TYPE,
-    typeKey: type.key,
-    gender: type.gender ?? undefined,
-    seed: 1009 + i * 7919,
-  }),
-}));
+const FOOTAGE = footage as Footage;
+const PLAN = libraryPlan();
 
-export const ALL_CAST: CastMember[] = CAST_GROUPS.flatMap((g) => g.members);
-
-export function castById(id: string): CastMember | undefined {
-  return ALL_CAST.find((m) => m.id === id);
+export function portraitFor(castId: string): string | null {
+  return FOOTAGE.portraits[castId] ?? null;
 }
 
-const FOOTAGE = footage as Record<string, string>;
-
-export function footageKey(castId: string, setting: string, variant = 0): string {
-  return `${castId}:${setting}:${variant}`;
-}
-
-/** Rendered footage when the library has it, otherwise the placeholder. */
-export function reactionFor(member: CastMember, setting: string, seed: number, variant = 0): ReactionSource {
-  const src = FOOTAGE[footageKey(member.id, setting, variant)];
-  return src ? { kind: "video", src } : { kind: "placeholder", member, setting, seed };
+/**
+ * Rendered footage when the library has it, otherwise the placeholder. A
+ * setting this member was not rendered in falls back to their nearest
+ * rendered take, so the face stays the one the visitor picked.
+ */
+export function reactionFor(member: CastMember, setting: string, seed: number): ReactionSource {
+  const exact = takeKey(member.id, setting);
+  const key = FOOTAGE.clips[exact]
+    ? exact
+    : PLAN.find((p) => p.castId === member.id && FOOTAGE.clips[p.key])?.key;
+  if (key) return { kind: "video", src: FOOTAGE.clips[key], poster: FOOTAGE.stills[key] };
+  return { kind: "placeholder", member, setting, seed };
 }
 
 export function hasRenderedFootage(): boolean {
-  return Object.keys(FOOTAGE).length > 0;
+  return Object.keys(FOOTAGE.clips).length > 0;
 }
 
 /** The hero carousel: one ad, a different person on every take. */
 export function showcaseSpecs(): { spec: ComposeSpec; member: CastMember; take: number }[] {
   const hook = HOOKS[0];
   const picks = CAST_GROUPS.flatMap((g) => g.members.slice(0, 2));
-  const settings = DIRECTION_OPTIONS.settings.map((s) => s.key);
-  return picks.map((member, i) => ({
-    member,
-    take: i + 1,
-    spec: {
-      reaction: reactionFor(member, settings[i % settings.length], 31 * (i + 1)),
-      reactionSeconds: 3.2,
-      appScreen: (["pace", "plan", "coach"] as const)[i % 3],
-      appSeconds: 3.4,
-      hook,
-      textStyle: "tiktok",
-      sound: { kind: "preset", key: "lofi" },
-    },
-  }));
+  return picks.map((member, i) => {
+    const planned = PLAN.find((p) => p.castId === member.id)!;
+    return {
+      member,
+      take: i + 1,
+      spec: {
+        reaction: reactionFor(member, planned.setting, 31 * (i + 1)),
+        reactionSeconds: 3.2,
+        appScreen: (["pace", "plan", "coach"] as const)[i % 3],
+        appSeconds: 3.4,
+        hook,
+        textStyle: "tiktok",
+        sound: { kind: "preset", key: "lofi" },
+      },
+    };
+  });
 }

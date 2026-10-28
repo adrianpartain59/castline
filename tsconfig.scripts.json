@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.node.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "resolveJsonModule": true,
+    "noEmit": true
+  },
+  "include": ["scripts", "src/contracts.ts", "src/engine", "src/demo/cast.ts", "src/demo/plan.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}

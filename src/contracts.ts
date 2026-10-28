@@ -80,7 +80,7 @@ export type SoundKey = "lofi" | "upbeat" | "room";
 
 /** Where the reaction footage comes from. Placeholder until the library is rendered. */
 export type ReactionSource =
-  | { kind: "video"; src: string }
+  | { kind: "video"; src: string; poster?: string }
   | { kind: "placeholder"; member: CastMember; setting: string; seed: number };
 
 export type SoundChoice = { kind: "preset"; key: SoundKey } | { kind: "upload"; file: File };

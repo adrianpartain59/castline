@@ -36,6 +36,36 @@ stages and reveals them. Until the footage library is rendered, the studio
 draws a stylized placeholder in its place (`src/demo/footage.json` maps each
 cast member and setting to its clip).
 
+## Rendering the footage library
+
+`scripts/render/` runs the production pipeline over the cast: a portrait per
+cast member, posed stills generated against that face, then a 4-second
+image-to-video clip per approved still. `src/demo/plan.ts` decides which takes
+exist, and the site reads the same plan, so the two never disagree.
+
+```bash
+npm run render
+```
+
+That prints the plan and the cost and spends nothing. Each paid stage needs
+`--live` and a ceiling, and only works on what a person approved in the stage
+before it:
+
+| Step | Command |
+| --- | --- |
+| Portraits (Gemini) | `npm run render -- portraits --live --max-usd 3` |
+| Look and approve | `npm run render -- review`, then `npm run render -- approve portraits all` |
+| Stills (Gemini, 2 per take) | `npm run render -- stills --live --max-usd 10` |
+| Pick one per take | `npm run render -- approve stills <key>=<n> …` |
+| Clips (Higgsfield Kling 3.0 Pro) | `npm run render -- clips --live --max-credits 260` |
+| Ship it | `npm run render -- publish` |
+
+`--only <castId,…>` renders a subset (try one person first). Clips spend
+Higgsfield plan credits through a signed-in `higgsfield` CLI; every clip is
+priced live before it is created, and a run over a quarter of the credits left
+needs `--owner-ok`. `bash scripts/render/smoke.sh` runs the whole thing against
+fakes.
+
 ## Built by
 
 Adrian Partain and Lucas Bennett.

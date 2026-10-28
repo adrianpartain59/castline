@@ -15,7 +15,11 @@ export function StillFrame({ source, className }: { source: ReactionSource; clas
     drawPlaceholderReaction(c.getContext("2d")!, source.member, source.setting, source.seed, 0, W, H);
     return c.toDataURL("image/jpeg", 0.86);
   }, [source]);
-  if (source.kind === "video") return <video className={className} src={source.src} muted playsInline preload="metadata" />;
+  if (source.kind === "video") {
+    return source.poster
+      ? <img className={className} src={source.poster} alt="" />
+      : <video className={className} src={source.src} muted playsInline preload="metadata" />;
+  }
   return <img className={className} src={src!} alt="" />;
 }
 
